@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bingo Generator</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="icon" href="https://fav.farm/🎲" />
+</head>
+<body>
+    <header class="site-header">
+        Bingo Card Generator
+    </header>
+    <section id="settings">
+      <label for="values"
+        >Introduïu Valors de Cel·la* <small>(Cada valor en la seva pròpia línia, mínim 9)</small></label
+      >
+      <textarea
+        name="values"
+        id="values"
+        cols="30"
+        rows="10"
+        placeholder="Paste/type your 9+ values with each on its own line."
+      >NUEVAYoL
+Mi gran noche
+Conga
+Ay Mamá
+Una Lluna a l'aigua
+Mediterrània
+Son mis amigos
+Esbarzers
+Aserejé
+Libre
+La marina sta morena
+Rosas
+Quedate
+Flying free
+La revolución sexual
+Vivimos en Castellón
+Aquí no hay playa
+Amigos para siempre</textarea>
+      
+      <label for="numCards">Quantitat de cartrons*</label>
+      <input
+        type="number"
+        min="1"
+        name="numCards"
+        id="numCards"
+        value="1"
+        required
+      />
+            
+      <label for="cardTitle">Títol del cartró*</label>
+      <input
+        type="text"
+        name="cardTitle"
+        id="cardTitle"
+        placeholder="Buid utilitza benitandús"
+      />
+
+      <div class="buttons">
+        <button id="generate">Generar</button>
+        <button id="print" disabled="true">Imprimir cartrons</button>
+      </div>
+
+      <ul class="validation" id="validation"></ul>
+    </section>
+
+    <section id="cards">
+    </section>
+
+    <footer class="site-footer">
+        <a href="https://github.com/fulldemo13" title="Get the code" target="_blank">
+            <img src="spin-record.gif" alt="GitHub Logomark" width="40">
+        </a>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
