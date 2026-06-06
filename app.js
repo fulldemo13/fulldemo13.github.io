@@ -4,10 +4,22 @@ let errors = [];
 const printBtn = document.querySelector('#print');
 printBtn.addEventListener('click', e => window.print());
 
+function esc(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
 function generateCards(evt) {
     errors = [];
 
-    const allSongs = document.querySelector('textarea').value.trim().split('\n').map(s => s.trim());
+    const rawSongs = document.querySelector('textarea').value.trim().split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    const seen = new Set();
+    const allSongs = rawSongs.filter(s => {
+        if (seen.has(s)) return false;
+        seen.add(s);
+        return true;
+    });
     const numCards = parseInt(document.querySelector('#numCards').value);
     const cardTitleField = document.querySelector('#cardTitle');
     const cardTitle = cardTitleField.value.length > 0 ? cardTitleField.value : 'Bingo Benitandús fest';
@@ -16,22 +28,21 @@ function generateCards(evt) {
         errors.push('"Quantitat de cartrons" ha de ser un número');
     }
     if (allSongs.length < 9) {
-        errors.push("Per favor necessitem 9 ítems mínim");
+        errors.push("Per favor necessitem 9 ítems únics mínim");
     }
     if (numCards < 1) {
         errors.push("Com a mínim es te que generar 1 cartró");
     }
 
     if (errors.length > 0) {
-        document.querySelector('#validation').innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+        document.querySelector('#validation').innerHTML = errors.map(e => `<li>${esc(e)}</li>`).join('');
         return;
     }
 
-    // Verificar si hi ha suficients combinacions úniques
     const maxUniqueCards = calculateMaxUniqueCards(allSongs.length);
     if (numCards > maxUniqueCards) {
         errors.push(`Solament es poden generar ${maxUniqueCards} cartrons únics amb ${allSongs.length} ítems`);
-        document.querySelector('#validation').innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+        document.querySelector('#validation').innerHTML = errors.map(e => `<li>${esc(e)}</li>`).join('');
         return;
     }
 
@@ -78,9 +89,9 @@ function calculateMaxUniqueCards(totalSongs) {
 
 function renderCards(data, title) {
     let template = ``;
-    let n = 1;
     const cardsPerPage = 6;
     const numPages = Math.ceil(data.length / cardsPerPage);
+    const escapedTitle = esc(title);
 
     for (let page = 0; page < numPages; page++) {
         template += `<div class="page">`;
@@ -90,13 +101,13 @@ function renderCards(data, title) {
 
             template += `<section class="card">
                     <header>
-                        <h1>${title}</h1> 
-                        <span class="no">Cartró n.${n + index}</span>
+                        <h1>${escapedTitle}</h1> 
+                        <span class="no">n.${index + 1}</span>
                     </header>
                 <main>`;
             
             for (let j = 0; j < data[index].length; j++) {
-                template += `<div class="cell">${data[index][j]}</div>`;
+                template += `<div class="cell">${esc(data[index][j])}</div>`;
             }
 
             template += `</main></section>`;
