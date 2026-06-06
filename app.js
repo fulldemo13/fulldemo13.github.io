@@ -3,11 +3,13 @@ let errors = [];
 
 const printBtn = document.querySelector('#print');
 printBtn.addEventListener('click', e => {
-    const overflowErrors = checkOverflow();
-    const validationEl = document.querySelector('#validation');
-    validationEl.innerHTML = overflowErrors.map(e => `<li>${esc(e)}</li>`).join('');
-    if (overflowErrors.length > 0) return;
-    window.print();
+    document.fonts.ready.then(() => {
+        const overflowErrors = checkOverflow();
+        const validationEl = document.querySelector('#validation');
+        validationEl.innerHTML = overflowErrors.map(e => `<li>${esc(e)}</li>`).join('');
+        if (overflowErrors.length > 0) return;
+        window.print();
+    });
 });
 
 function esc(str) {
@@ -57,6 +59,8 @@ function generateCards(evt) {
     const cardsPerPage = parseInt(document.querySelector('#cardsPerPage').value);
     const cardTitleField = document.querySelector('#cardTitle');
     const cardTitle = cardTitleField.value.length > 0 ? cardTitleField.value : 'Bingo Benitandús fest';
+    const titleFont = document.querySelector('#titleFont').value;
+    const cellFont = document.querySelector('#cellFont').value;
 
     if (duplicates.size > 0) {
         const dupList = [...duplicates].map(d => `"${truncate(d, 30)}"`).join(', ');
@@ -89,7 +93,7 @@ function generateCards(evt) {
     }
 
     let data = generateUniqueCards(allSongs, numCards);
-    renderCards(data, cardTitle, cardsPerPage);
+    renderCards(data, cardTitle, cardsPerPage, titleFont, cellFont);
 }
 
 function generateUniqueCards(songs, numCards) {
@@ -128,9 +132,16 @@ function calculateMaxUniqueCards(totalSongs) {
     return Math.floor(numerator / denominator);
 }
 
-function renderCards(data, title, cardsPerPage) {
+function quoteFont(font) {
+    const genericFamilies = new Set(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui']);
+    return genericFamilies.has(font) ? font : `'${font}'`;
+}
+
+function renderCards(data, title, cardsPerPage, titleFont, cellFont) {
     const { cols, rows, cardSize } = calculateGrid(cardsPerPage);
     const escapedTitle = esc(title);
+    const titleFontCSS = quoteFont(titleFont);
+    const cellFontCSS = quoteFont(cellFont);
     const numPages = Math.ceil(data.length / (cols * rows));
     const slotsPerPage = cols * rows;
     let template = '';
@@ -144,7 +155,7 @@ function renderCards(data, title, cardsPerPage) {
                 continue;
             }
 
-            template += `<section class="card">
+            template += `<section class="card" style="--title-font:${titleFontCSS};--cell-font:${cellFontCSS}">
                     <header>
                         <h1>${escapedTitle}</h1> 
                         <span class="no">n.${index + 1}</span>
@@ -163,10 +174,12 @@ function renderCards(data, title, cardsPerPage) {
     document.querySelector('#print').disabled = false;
     document.querySelector('#cards').innerHTML = template;
 
-    const overflowErrors = checkOverflow();
-    if (overflowErrors.length > 0) {
-        document.querySelector('#validation').innerHTML = overflowErrors.map(e => `<li>${esc(e)}</li>`).join('');
-    }
+    document.fonts.ready.then(() => {
+        const overflowErrors = checkOverflow();
+        if (overflowErrors.length > 0) {
+            document.querySelector('#validation').innerHTML = overflowErrors.map(e => `<li>${esc(e)}</li>`).join('');
+        }
+    });
 }
 
 function truncate(str, maxLen) {

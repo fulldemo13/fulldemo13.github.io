@@ -13,7 +13,7 @@
     </header>
     <section id="settings">
       <label for="values"
-        >Introduïu Valors de Cel·la* <small>(Cada valor en la seva pròpia línia, mínim 9)</small></label
+        >Introduïu Valors de Cel·la <small>(Cada valor en la seva pròpia línia, mínim 9)</small></label
       >
       <textarea
         name="values"
@@ -39,40 +39,80 @@ La revolución sexual
 Vivimos en Castellón
 Aquí no hay playa
 Amigos para siempre</textarea>
-      
-      <label for="numCards">Quantitat de cartrons*</label>
-      <input
-        type="number"
-        min="1"
-        name="numCards"
-        id="numCards"
-        value="1"
-        required
-      />
-            
-      <label for="cardTitle">Títol del cartró*</label>
+
+      <label for="cardTitle">Títol del cartró</label>
       <input
         type="text"
         name="cardTitle"
         id="cardTitle"
         placeholder="Buid utilitza benitandús"
       />
+      
+      <div class="font-row">
+        <div class="font-col">
+          <label for="numCards">Quantitat de cartrons</label>
+          <input
+            type="number"
+            min="1"
+            name="numCards"
+            id="numCards"
+            value="1"
+            required
+          />
+        </div>
+        <div class="font-col">
+          <label for="cardsPerPage">Cartrons per pàgina</label>
+          <select name="cardsPerPage" id="cardsPerPage">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6" selected>6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+      </div>
 
-      <label for="cardsPerPage">Cartrons per pàgina*</label>
-      <select name="cardsPerPage" id="cardsPerPage">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6" selected>6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-      </select>
+      <div class="font-row">
+        <div class="font-col">
+          <label for="titleFont">Tipografia del títol</label>
+          <select name="titleFont" id="titleFont">
+            <option value="Luckiest Guy" selected style="font-family:'Luckiest Guy',cursive">Luckiest Guy</option>
+            <option value="Permanent Marker" style="font-family:'Permanent Marker',cursive">Permanent Marker</option>
+            <option value="Pacifico" style="font-family:'Pacifico',cursive">Pacifico</option>
+            <option value="Bungee Shade" style="font-family:'Bungee Shade',cursive">Bungee Shade</option>
+            <option value="Bangers" style="font-family:'Bangers',cursive">Bangers</option>
+            <option value="Lobster" style="font-family:'Lobster',cursive">Lobster</option>
+            <option value="Fredoka" style="font-family:'Fredoka',cursive">Fredoka</option>
+            <option value="Righteous" style="font-family:'Righteous',cursive">Righteous</option>
+            <option value="Anton" style="font-family:'Anton',sans-serif">Anton</option>
+            <option value="Boogaloo" style="font-family:'Boogaloo',cursive">Boogaloo</option>
+          </select>
+        </div>
+        <div class="font-col">
+          <label for="cellFont">Tipografia de les cançons</label>
+          <select name="cellFont" id="cellFont">
+            <option value="sans-serif" selected style="font-family:sans-serif">Sans-serif</option>
+            <option value="serif" style="font-family:serif">Serif</option>
+            <option value="monospace" style="font-family:monospace">Monospace</option>
+            <option value="Merriweather" style="font-family:'Merriweather',serif">Merriweather</option>
+            <option value="Open Sans" style="font-family:'Open Sans',sans-serif">Open Sans</option>
+            <option value="Roboto" style="font-family:'Roboto',sans-serif">Roboto</option>
+            <option value="Lato" style="font-family:'Lato',sans-serif">Lato</option>
+            <option value="Nunito" style="font-family:'Nunito',sans-serif">Nunito</option>
+            <option value="Poppins" style="font-family:'Poppins',sans-serif">Poppins</option>
+            <option value="Ubuntu" style="font-family:'Ubuntu',sans-serif">Ubuntu</option>
+            <option value="Raleway" style="font-family:'Raleway',sans-serif">Raleway</option>
+            <option value="Fira Sans" style="font-family:'Fira Sans',sans-serif">Fira Sans</option>
+          </select>
+        </div>
+      </div>
 
       <div class="buttons">
         <button id="generate">Generar</button>
