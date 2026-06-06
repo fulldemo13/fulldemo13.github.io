@@ -2,7 +2,13 @@ document.querySelector("#generate").addEventListener("click", generateCards);
 let errors = [];
 
 const printBtn = document.querySelector('#print');
-printBtn.addEventListener('click', e => window.print());
+printBtn.addEventListener('click', e => {
+    const overflowErrors = checkOverflow();
+    const validationEl = document.querySelector('#validation');
+    validationEl.innerHTML = overflowErrors.map(e => `<li>${esc(e)}</li>`).join('');
+    if (overflowErrors.length > 0) return;
+    window.print();
+});
 
 function esc(str) {
     const div = document.createElement('div');
@@ -32,12 +38,18 @@ function calculateGrid(cardsPerPage) {
 }
 
 function generateCards(evt) {
+    const validationEl = document.querySelector('#validation');
+    validationEl.innerHTML = '';
     errors = [];
 
     const rawSongs = document.querySelector('textarea').value.trim().split('\n').map(s => s.trim()).filter(s => s.length > 0);
     const seen = new Set();
+    const duplicates = new Set();
     const allSongs = rawSongs.filter(s => {
-        if (seen.has(s)) return false;
+        if (seen.has(s)) {
+            duplicates.add(s);
+            return false;
+        }
         seen.add(s);
         return true;
     });
@@ -45,6 +57,11 @@ function generateCards(evt) {
     const cardsPerPage = parseInt(document.querySelector('#cardsPerPage').value);
     const cardTitleField = document.querySelector('#cardTitle');
     const cardTitle = cardTitleField.value.length > 0 ? cardTitleField.value : 'Bingo Benitandús fest';
+
+    if (duplicates.size > 0) {
+        const dupList = [...duplicates].map(d => `"${truncate(d, 30)}"`).join(', ');
+        errors.push(`Cançons repetides a la llista: ${dupList}`);
+    }
 
     if (isNaN(numCards)) {
         errors.push('"Quantitat de cartrons" ha de ser un número');
@@ -60,14 +77,14 @@ function generateCards(evt) {
     }
 
     if (errors.length > 0) {
-        document.querySelector('#validation').innerHTML = errors.map(e => `<li>${esc(e)}</li>`).join('');
+        validationEl.innerHTML = errors.map(e => `<li>${esc(e)}</li>`).join('');
         return;
     }
 
     const maxUniqueCards = calculateMaxUniqueCards(allSongs.length);
     if (numCards > maxUniqueCards) {
         errors.push(`Solament es poden generar ${maxUniqueCards} cartrons únics amb ${allSongs.length} ítems`);
-        document.querySelector('#validation').innerHTML = errors.map(e => `<li>${esc(e)}</li>`).join('');
+        validationEl.innerHTML = errors.map(e => `<li>${esc(e)}</li>`).join('');
         return;
     }
 
@@ -145,6 +162,37 @@ function renderCards(data, title, cardsPerPage) {
 
     document.querySelector('#print').disabled = false;
     document.querySelector('#cards').innerHTML = template;
+
+    const overflowErrors = checkOverflow();
+    if (overflowErrors.length > 0) {
+        document.querySelector('#validation').innerHTML = overflowErrors.map(e => `<li>${esc(e)}</li>`).join('');
+    }
+}
+
+function truncate(str, maxLen) {
+    if (str.length <= maxLen) return str;
+    return str.slice(0, maxLen - 1) + '…';
+}
+
+function checkOverflow() {
+    const overflow = new Set();
+    const cards = document.querySelectorAll('.card:not(.empty)');
+    if (cards.length === 0) return [];
+
+    const h1 = cards[0].querySelector('h1');
+    if (h1 && h1.scrollWidth > h1.clientWidth + 1) {
+        overflow.add(`El títol no cap a la capçalera: "${truncate(h1.textContent, 30)}"`);
+    }
+
+    cards.forEach(card => {
+        card.querySelectorAll('.cell').forEach(cell => {
+            if (cell.scrollHeight > cell.clientHeight + 1) {
+                overflow.add(`La cançó no cap a la cel·la: "${truncate(cell.textContent, 30)}"`);
+            }
+        });
+    });
+
+    return [...overflow];
 }
 
 function getCardData(songs) {
