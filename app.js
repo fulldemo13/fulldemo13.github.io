@@ -61,6 +61,9 @@ function generateCards(evt) {
     const cardTitle = cardTitleField.value.length > 0 ? cardTitleField.value : 'Bingo Benitandús fest';
     const titleFont = document.querySelector('#titleFont').value;
     const cellFont = document.querySelector('#cellFont').value;
+    const headerColor = document.querySelector('#headerColor').value;
+    const cellOddColor = document.querySelector('#cellOddColor').value;
+    const cellEvenColor = document.querySelector('#cellEvenColor').value;
 
     if (duplicates.size > 0) {
         const dupList = [...duplicates].map(d => `"${truncate(d, 30)}"`).join(', ');
@@ -93,7 +96,7 @@ function generateCards(evt) {
     }
 
     let data = generateUniqueCards(allSongs, numCards);
-    renderCards(data, cardTitle, cardsPerPage, titleFont, cellFont);
+    renderCards(data, cardTitle, cardsPerPage, titleFont, cellFont, headerColor, cellOddColor, cellEvenColor);
 }
 
 function generateUniqueCards(songs, numCards) {
@@ -137,7 +140,7 @@ function quoteFont(font) {
     return genericFamilies.has(font) ? font : `'${font}'`;
 }
 
-function renderCards(data, title, cardsPerPage, titleFont, cellFont) {
+function renderCards(data, title, cardsPerPage, titleFont, cellFont, headerColor, cellOddColor, cellEvenColor) {
     const { cols, rows, cardSize } = calculateGrid(cardsPerPage);
     const escapedTitle = esc(title);
     const titleFontCSS = quoteFont(titleFont);
@@ -155,7 +158,7 @@ function renderCards(data, title, cardsPerPage, titleFont, cellFont) {
                 continue;
             }
 
-            template += `<section class="card" style="--title-font:${titleFontCSS};--cell-font:${cellFontCSS}">
+            template += `<section class="card" style="--title-font:${titleFontCSS};--cell-font:${cellFontCSS};--header-color:${headerColor};--cell-odd-color:${cellOddColor};--cell-even-color:${cellEvenColor}">
                     <header>
                         <h1>${escapedTitle}</h1> 
                         <span class="no">n.${index + 1}</span>
