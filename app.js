@@ -1,6 +1,17 @@
 document.querySelector("#generate").addEventListener("click", generateCards);
 let errors = [];
 
+function updateSelectFont(select) {
+    const val = select.value;
+    const genericFamilies = new Set(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui']);
+    select.style.fontFamily = genericFamilies.has(val) ? val : `'${val}'`;
+}
+
+document.querySelectorAll('#titleFont, #cellFont').forEach(select => {
+    updateSelectFont(select);
+    select.addEventListener('change', () => updateSelectFont(select));
+});
+
 const printBtn = document.querySelector('#print');
 printBtn.addEventListener('click', e => {
     document.fonts.ready.then(() => {
