@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bingo Generator</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="icon" href="https://fav.farm/🎲" />
+</head>
+<body>
+    <header class="site-header">
+        Bingo Card Generator
+    </header>
+    <section id="settings">
+      <label for="values"
+        >Introduïu Valors de Cel·la <small>(Cada valor en la seva pròpia línia, mínim 9)</small></label
+      >
+      <textarea
+        name="values"
+        id="values"
+        cols="30"
+        rows="10"
+        placeholder="Paste/type your 9+ values with each on its own line."
+      >NUEVAYoL
+Mi gran noche
+Conga
+Ay Mamá
+Una Lluna a l'aigua
+Mediterrània
+Son mis amigos
+Esbarzers
+Aserejé
+Libre
+La marina sta morena
+Rosas
+Quedate
+Flying free
+La revolución sexual
+Vivimos en Castellón
+Aquí no hay playa
+Amigos para siempre</textarea>
+
+      <label for="cardTitle">Títol del cartró</label>
+      <input
+        type="text"
+        name="cardTitle"
+        id="cardTitle"
+        placeholder="Buid utilitza benitandús"
+      />
+      
+      <div class="font-row">
+        <div class="font-col">
+          <label for="numCards">Quantitat de cartrons</label>
+          <input
+            type="number"
+            min="1"
+            name="numCards"
+            id="numCards"
+            value="1"
+            required
+          />
+        </div>
+        <div class="font-col">
+          <label for="cardsPerPage">Tamany de cartró</label>
+          <select name="cardsPerPage" id="cardsPerPage">
+            <option value="1">200×200 mm</option>
+            <option value="2">143×143 mm</option>
+            <option value="4">100×100 mm</option>
+            <option value="6" selected>96×96 mm</option>
+            <option value="12">67×67 mm</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="font-row">
+        <div class="font-col">
+          <label for="titleFont">Tipografia del títol</label>
+          <select name="titleFont" id="titleFont">
+            <option value="Luckiest Guy" selected style="font-family:'Luckiest Guy',cursive">Luckiest Guy</option>
+            <option value="Permanent Marker" style="font-family:'Permanent Marker',cursive">Permanent Marker</option>
+            <option value="Pacifico" style="font-family:'Pacifico',cursive">Pacifico</option>
+            <option value="Bungee Shade" style="font-family:'Bungee Shade',cursive">Bungee Shade</option>
+            <option value="Bangers" style="font-family:'Bangers',cursive">Bangers</option>
+            <option value="Lobster" style="font-family:'Lobster',cursive">Lobster</option>
+            <option value="Fredoka" style="font-family:'Fredoka',cursive">Fredoka</option>
+            <option value="Righteous" style="font-family:'Righteous',cursive">Righteous</option>
+            <option value="Anton" style="font-family:'Anton',sans-serif">Anton</option>
+            <option value="Boogaloo" style="font-family:'Boogaloo',cursive">Boogaloo</option>
+          </select>
+        </div>
+        <div class="font-col">
+          <label for="cellFont">Tipografia de les cançons</label>
+          <select name="cellFont" id="cellFont">
+            <option value="sans-serif" selected style="font-family:sans-serif">Sans-serif</option>
+            <option value="serif" style="font-family:serif">Serif</option>
+            <option value="monospace" style="font-family:monospace">Monospace</option>
+            <option value="Merriweather" style="font-family:'Merriweather',serif">Merriweather</option>
+            <option value="Open Sans" style="font-family:'Open Sans',sans-serif">Open Sans</option>
+            <option value="Roboto" style="font-family:'Roboto',sans-serif">Roboto</option>
+            <option value="Lato" style="font-family:'Lato',sans-serif">Lato</option>
+            <option value="Nunito" style="font-family:'Nunito',sans-serif">Nunito</option>
+            <option value="Poppins" style="font-family:'Poppins',sans-serif">Poppins</option>
+            <option value="Ubuntu" style="font-family:'Ubuntu',sans-serif">Ubuntu</option>
+            <option value="Raleway" style="font-family:'Raleway',sans-serif">Raleway</option>
+            <option value="Fira Sans" style="font-family:'Fira Sans',sans-serif">Fira Sans</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="font-row three-cols">
+        <div class="font-col">
+          <label for="headerColor">Color del títol</label>
+          <input type="color" id="headerColor" name="headerColor" value="#dddddd">
+        </div>
+        <div class="font-col">
+          <label for="cellOddColor">Color cel·la senar</label>
+          <input type="color" id="cellOddColor" name="cellOddColor" value="#dddddd">
+        </div>
+        <div class="font-col">
+          <label for="cellEvenColor">Color cel·la parell</label>
+          <input type="color" id="cellEvenColor" name="cellEvenColor" value="#ffffff">
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button id="generate">Generar</button>
+        <button id="print" disabled="true">Imprimir cartrons</button>
+      </div>
+
+      <ul class="validation" id="validation"></ul>
+    </section>
+
+    <section id="cards">
+    </section>
+
+    <footer class="site-footer">
+        <a href="https://github.com/fulldemo13" title="Get the code" target="_blank">
+            <img src="spin-record.gif" alt="GitHub Logomark" width="40">
+        </a>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
