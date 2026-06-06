@@ -10,6 +10,27 @@ function esc(str) {
     return div.innerHTML;
 }
 
+function calculateGrid(cardsPerPage) {
+    let bestCols = 1;
+    let bestSize = 0;
+    const padding = 5;
+    const usableW = 210 - 2 * padding;
+    const usableH = 297 - 2 * padding;
+
+    for (let cols = 1; cols <= cardsPerPage; cols++) {
+        const rows = Math.ceil(cardsPerPage / cols);
+        const cellW = usableW / cols;
+        const cellH = usableH / rows;
+        const size = Math.min(cellW, cellH);
+        if (size > bestSize) {
+            bestSize = size;
+            bestCols = cols;
+        }
+    }
+
+    return { cols: bestCols, rows: Math.ceil(cardsPerPage / bestCols), cardSize: bestSize };
+}
+
 function generateCards(evt) {
     errors = [];
 
@@ -21,11 +42,15 @@ function generateCards(evt) {
         return true;
     });
     const numCards = parseInt(document.querySelector('#numCards').value);
+    const cardsPerPage = parseInt(document.querySelector('#cardsPerPage').value);
     const cardTitleField = document.querySelector('#cardTitle');
     const cardTitle = cardTitleField.value.length > 0 ? cardTitleField.value : 'Bingo Benitandús fest';
 
     if (isNaN(numCards)) {
         errors.push('"Quantitat de cartrons" ha de ser un número');
+    }
+    if (isNaN(cardsPerPage) || cardsPerPage < 1) {
+        errors.push('"Cartrons per pàgina" ha de ser un número major que 0');
     }
     if (allSongs.length < 9) {
         errors.push("Per favor necessitem 9 ítems únics mínim");
@@ -47,7 +72,7 @@ function generateCards(evt) {
     }
 
     let data = generateUniqueCards(allSongs, numCards);
-    renderCards(data, cardTitle);
+    renderCards(data, cardTitle, cardsPerPage);
 }
 
 function generateUniqueCards(songs, numCards) {
@@ -72,7 +97,6 @@ function generateUniqueCards(songs, numCards) {
 }
 
 function calculateMaxUniqueCards(totalSongs) {
-    // Calcular combinacions possbles: C(n, 9) = n! / (9! * (n-9)!)
     if (totalSongs < 9) return 0;
     
     let n = totalSongs;
@@ -87,17 +111,21 @@ function calculateMaxUniqueCards(totalSongs) {
     return Math.floor(numerator / denominator);
 }
 
-function renderCards(data, title) {
-    let template = ``;
-    const cardsPerPage = 6;
-    const numPages = Math.ceil(data.length / cardsPerPage);
+function renderCards(data, title, cardsPerPage) {
+    const { cols, rows, cardSize } = calculateGrid(cardsPerPage);
     const escapedTitle = esc(title);
+    const numPages = Math.ceil(data.length / (cols * rows));
+    const slotsPerPage = cols * rows;
+    let template = '';
 
     for (let page = 0; page < numPages; page++) {
-        template += `<div class="page">`;
-        for (let i = 0; i < cardsPerPage; i++) {
-            const index = page * cardsPerPage + i;
-            if (index >= data.length) break;
+        template += `<div class="page" style="--cols:${cols};--rows:${rows};--card-size:${cardSize.toFixed(2)}mm;grid-template-columns:repeat(${cols},var(--card-size));grid-template-rows:repeat(${rows},var(--card-size));justify-content:center;align-content:center">`;
+        for (let i = 0; i < slotsPerPage; i++) {
+            const index = page * slotsPerPage + i;
+            if (index >= data.length) {
+                template += `<div class="card empty"></div>`;
+                continue;
+            }
 
             template += `<section class="card">
                     <header>
